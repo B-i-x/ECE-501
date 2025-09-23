@@ -69,7 +69,7 @@ class Query:
         cols = [d[0] for d in cur.description] if cur.description else []
         return rows, cols
 
-    def run_and_print(self, max_rows: int = 10) -> None:
+    def run_and_print(self, max_rows: int = 5) -> None:
         try:
             rows, cols = self.run()
         except sqlite3.Error as e:

@@ -7,3 +7,11 @@ FROM movies m
 JOIN ratings r ON r.movieId = m.movieId
 GROUP BY m.movieId, m.title
 HAVING AVG(r.rating) >= 4.0;
+
+-- QUERY: most_active_users
+SELECT r.userId,
+       COUNT(*) AS num_ratings
+FROM ratings r
+GROUP BY r.userId
+ORDER BY num_ratings DESC, r.userId ASC
+LIMIT 3;

@@ -131,9 +131,13 @@ def main():
         sql_query_name="movies_avg_rating",
         description="Movie with average rating of at least 4.0:"
     ).run_and_print()
-    # print("Query1 Results:")
-    # for row in Query1_results:
-    #     print(row)
+
+    Query(
+        con=sqlite3.connect(db_path),
+        sql_query_file_path=sql_query_file_path_hw2,
+        sql_query_name="most_active_users",
+        description="Top 3 most active users:"
+    ).run_and_print()
 
 if __name__ == "__main__":
     main()
