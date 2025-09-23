@@ -15,3 +15,33 @@ FROM ratings r
 GROUP BY r.userId
 ORDER BY num_ratings DESC, r.userId ASC
 LIMIT 3;
+
+-- QUERY: genre_count
+WITH RECURSIVE
+split AS (
+  SELECT movieId, genres || '|' AS rest
+  FROM movies
+  UNION ALL
+  SELECT movieId, substr(rest, instr(rest, '|') + 1)
+  FROM split
+  WHERE rest <> ''
+),
+genres AS (
+  SELECT movieId, substr(rest, 1, instr(rest, '|') - 1) AS genre
+  FROM split
+  WHERE instr(rest, '|') > 0
+)
+SELECT genre AS genre_name,
+       COUNT(DISTINCT movieId) AS distinct_movies
+FROM genres
+WHERE genre NOT IN ('', '(no genres listed)')
+GROUP BY genre
+ORDER BY distinct_movies DESC, genre_name ASC;
+
+-- QUERY: most_common_rating
+SELECT rating,
+       COUNT(*) AS rating_count
+FROM ratings
+GROUP BY rating
+ORDER BY rating_count DESC, rating DESC
+LIMIT 1;

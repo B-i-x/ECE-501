@@ -139,5 +139,20 @@ def main():
         description="Top 3 most active users:"
     ).run_and_print()
 
+    Query(
+        con=sqlite3.connect(db_path),
+        sql_query_file_path=sql_query_file_path_hw2,
+        sql_query_name="genre_count",
+        description="Count all movies by genre"
+    ).run_and_print()
+
+    Query(
+        con=sqlite3.connect(db_path),
+        sql_query_file_path=sql_query_file_path_hw2,
+        sql_query_name="most_common_rating",
+        description="Most common rating of each movies"
+    ).run_and_print()
+
+    
 if __name__ == "__main__":
     main()
