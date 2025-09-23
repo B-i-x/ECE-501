@@ -69,17 +69,47 @@ class Query:
         cols = [d[0] for d in cur.description] if cur.description else []
         return rows, cols
 
-    def run_and_print(self) -> None:
-        rows, cols = self.run()
+    def run_and_print(self, max_rows: int | None = None) -> None:
+        try:
+            rows, cols = self.run()
+        except sqlite3.Error as e:
+            print(f"[SQL error] {e}")
+            return
+
         if self.description:
             print(self.description)
+
         if not cols:
             print("(No result set)")
             return
-        widths = [max(len(str(c)), *(len(str(r[i])) for r in rows) or [0]) for i, c in enumerate(cols)]
+
+        # Compute column widths from header first
+        widths = [len(str(c)) for c in cols]
+
+        # Update widths from rows
+        for row in rows:
+            for i, v in enumerate(row):
+                s = "" if v is None else str(v)
+                if len(s) > widths[i]:
+                    widths[i] = len(s)
+
+        # Print header + separator
         header = " | ".join(str(c).ljust(w) for c, w in zip(cols, widths))
         sep = "-+-".join("-" * w for w in widths)
         print(header)
         print(sep)
-        for r in rows:
-            print(" | ".join(str(v).ljust(w) for v, w in zip(r, widths)))
+
+        # Optionally limit printed rows
+        to_print = rows if max_rows is None else rows[:max_rows]
+
+        # Print rows
+        for r in to_print:
+            print(" | ".join(("" if v is None else str(v)).ljust(w) for v, w in zip(r, widths)))
+
+        # Footer with row count (and note if truncated)
+        total = len(rows)
+        if max_rows is not None and total > max_rows:
+            print(f"… ({max_rows} of {total} rows shown)")
+        else:
+            print(f"({total} rows)")
+
