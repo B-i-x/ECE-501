@@ -69,7 +69,7 @@ class Query:
         cols = [d[0] for d in cur.description] if cur.description else []
         return rows, cols
 
-    def run_and_print(self, max_rows: int | None = None) -> None:
+    def run_and_print(self, max_rows: int = 10) -> None:
         try:
             rows, cols = self.run()
         except sqlite3.Error as e:
@@ -83,33 +83,33 @@ class Query:
             print("(No result set)")
             return
 
-        # Compute column widths from header first
-        widths = [len(str(c)) for c in cols]
+        total = len(rows)
+        print(f"Total rows: {total}")
 
-        # Update widths from rows
-        for row in rows:
+        # compute column widths
+        widths = [len(str(c)) for c in cols]
+        for row in rows[:max_rows]:  # Only consider rows to be printed for width calculation
             for i, v in enumerate(row):
                 s = "" if v is None else str(v)
-                if len(s) > widths[i]:
-                    widths[i] = len(s)
+                widths[i] = max(widths[i], len(s))
 
-        # Print header + separator
+        # header
         header = " | ".join(str(c).ljust(w) for c, w in zip(cols, widths))
         sep = "-+-".join("-" * w for w in widths)
         print(header)
         print(sep)
 
-        # Optionally limit printed rows
-        to_print = rows if max_rows is None else rows[:max_rows]
-
-        # Print rows
+        # rows
+        to_print = rows[:max_rows]
         for r in to_print:
-            print(" | ".join(("" if v is None else str(v)).ljust(w) for v, w in zip(r, widths)))
+            line = " | ".join(
+                ("" if v is None else str(v)).ljust(w) if isinstance(v, str)
+                else ("" if v is None else str(v)).rjust(w)
+                for v, w in zip(r, widths)
+            )
+            print(line)
 
-        # Footer with row count (and note if truncated)
-        total = len(rows)
-        if max_rows is not None and total > max_rows:
+        if total > max_rows:
             print(f"… ({max_rows} of {total} rows shown)")
         else:
             print(f"({total} rows)")
-
