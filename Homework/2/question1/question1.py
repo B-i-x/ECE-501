@@ -12,7 +12,7 @@ from pathlib import Path
 import sys
 from pathlib import Path
 
-sys.path.append(str(Path(__file__).resolve().parents[2]))
+sys.path.append(str(Path(__file__).resolve().parents[3]))
 from query import Query 
 
 def create_tables(con: sqlite3.Connection):
@@ -102,11 +102,12 @@ def load_csv(con: sqlite3.Connection, path: Path, table: str, columns: list[str]
 
 
 def main():
+    sql_query_file_path_hw2 = Path("Homework/2/question1/question1.sql")
+    
     data_dir = r"data/ml-latest-small"
-    db_path = Path("HW2/question1/movielens_small.db")
-
-    # Ensure parent folder exists for DB (current dir is fine; create if nested path is used)
+    db_path = Path("Homework/2/question1/movielens_small.db")
     db_path.parent.mkdir(parents=True, exist_ok=True)
+
 
     con = sqlite3.connect(db_path)
     try:
@@ -124,14 +125,15 @@ def main():
         con.close()
 
     # Example usage of the provided Query helper (adjust path to your SQL file)
-    Query1_results = Query(
+    Query(
         con=sqlite3.connect(db_path),
-        sql_query_file_path=Path("HW2/question1/query1.sql"),
-        description="List all movies with an average rating of at least 4.0.",
-    ).execute()
-    print("Query1 Results:")
-    for row in Query1_results:
-        print(row)
+        sql_query_file_path=sql_query_file_path_hw2,
+        sql_query_name="movies_avg_rating",
+        description="Movie with average rating of at least 4.0:"
+    ).run_and_print()
+    # print("Query1 Results:")
+    # for row in Query1_results:
+    #     print(row)
 
 if __name__ == "__main__":
     main()
