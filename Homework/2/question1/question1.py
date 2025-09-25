@@ -101,6 +101,8 @@ def load_csv(con: sqlite3.Connection, path: Path, table: str, columns: list[str]
         )
 
 
+def create_and_populate_user_table(con: sqlite3.Connection):
+    """"""
 def main():
     sql_query_file_path_hw2 = Path("Homework/2/question1/question1.sql")
     
