@@ -113,3 +113,6 @@ class Query:
             print(f"… ({max_rows} of {total} rows shown)")
         else:
             print(f"({total} rows)")
+
+        print()
+        print()
