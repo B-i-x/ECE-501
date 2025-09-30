@@ -10,7 +10,6 @@ import sqlite3
 from pathlib import Path
 
 import sys
-from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parents[3]))
 from query import Query 
@@ -100,9 +99,8 @@ def load_csv(con: sqlite3.Connection, path: Path, table: str, columns: list[str]
             to_insert
         )
 
+from user_table import create_and_populate_user_table
 
-def create_and_populate_user_table(con: sqlite3.Connection):
-    """"""
 def main():
     sql_query_file_path_hw2 = Path("Homework/2/question1/question1.sql")
     
@@ -121,6 +119,8 @@ def main():
         load_csv(con, data_root / "ratings.csv", "ratings", ["userId", "movieId", "rating", "timestamp"])
         load_csv(con, data_root / "links.csv",   "links",   ["movieId", "imdbId", "tmdbId"])
         load_csv(con, data_root / "tags.csv",    "tags",    ["userId", "movieId", "tag", "timestamp"])
+
+        create_and_populate_user_table(con)
 
         print(f"Loaded all data into SQLite: {db_path.resolve()}")
     finally:
@@ -155,6 +155,12 @@ def main():
         description="Most common rating of each movies"
     ).run_and_print()
 
+    Query(
+        con=sqlite3.connect(db_path),
+        sql_query_file_path=sql_query_file_path_hw2,
+        sql_query_name="movies_under_25",
+        description="Movies with ratings from users under 25"
+    ).run_and_print()
     
 if __name__ == "__main__":
     main()

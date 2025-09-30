@@ -45,3 +45,10 @@ FROM ratings
 GROUP BY rating
 ORDER BY rating_count DESC, rating DESC
 LIMIT 1;
+
+-- QUERY: movies_under_25
+SELECT DISTINCT m.title
+FROM movies m
+JOIN ratings r ON r.movieId = m.movieId
+JOIN users u ON u.userId = r.userId
+WHERE u.age < 25
