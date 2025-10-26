@@ -1,0 +1,59 @@
+# ========================
+# Python cache and bytecode
+# ========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ========================
+# Environment folders
+# ========================
+# Conda environments
+env/
+.conda/
+conda_env/
+environment.yml.lock
+
+# Python virtual environments
+.venv/
+.env/
+
+# ========================
+# System and OS files
+# ========================
+.DS_Store
+
+# ========================
+# Data and artifacts
+# ========================
+# Ignore all generated databases
+*.db
+data/*.db
+data/**/*.db
+
+# Ignore all raw data files but keep placeholder
+raw_data/*
+!raw_data/.keep
+
+# ========================
+# Results, figures, and plans
+# ========================
+# Ignore generated plots and plans, but keep placeholder files
+figs/*
+!figs/.keep
+plans/*
+!plans/.keep
+
+# ========================
+# Logs, reports, and CSVs
+# ========================
+*.log
+*.csv
+
+# ========================
+# Jupyter and editors
+# ========================
+.ipynb_checkpoints/
+*.swp
+*.tmp

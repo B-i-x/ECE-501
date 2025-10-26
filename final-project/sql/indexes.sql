@@ -1,0 +1,5 @@
+-- targeted compound indexes (fill during Phase 3)
+-- CREATE INDEX IF NOT EXISTS idx_att_s_y_g ON attendance(school_id, year, subgroup_code);
+-- CREATE INDEX IF NOT EXISTS idx_assess_s_y_g ON assessments(school_id, year, subgroup_code);
+-- optional partial index example for ELA only (SQLite >= 3.8.0)
+-- CREATE INDEX IF NOT EXISTS idx_assess_ela ON assessments(school_id, year, subgroup_code) WHERE subject='ELA';
